@@ -40,9 +40,6 @@ case ${ID,,} in
     *) echo "ERROR: Supported package manager not found.  Supported: apt,yum,zypper"; exit 1;;
 esac
 
-if ! $(git --version &>/dev/null); then
-    ${INSTALLER_CMD} git
-fi
 if ! $(python --version &>/dev/null); then
     ${INSTALLER_CMD} ${PKG_MAP[python]}
 fi
@@ -55,7 +52,7 @@ curl -sL https://bootstrap.pypa.io/get-pip.py | python
 output_folder=/opt/shared/$ONE_DISTRO/
 dib_xci_folder=/opt/docker-dib-xci
 
-git clone https://github.com/hwoarang/docker-dib-xci.git $dib_xci_folder
+curl -o $dib_xci_folder/do-build.sh https://raw.githubusercontent.com/hwoarang/docker-dib-xci/master/do-build.sh
 cd $dib_xci_folder
 ./do-build.sh
 
