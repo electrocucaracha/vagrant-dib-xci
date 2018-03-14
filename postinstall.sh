@@ -15,6 +15,7 @@ case ${ID,,} in
     ;;
 
     ubuntu|debian)
+    sudo apt-get update
     export ONE_DISTRO="ubuntu"
     INSTALLER_CMD="sudo -H -E apt-get -y install"
     PKG_MAP=(
@@ -50,10 +51,11 @@ fi
 curl -sL https://bootstrap.pypa.io/get-pip.py | python
 
 output_folder=/opt/shared/$ONE_DISTRO/
-dib_xci_folder=/opt/docker-dib-xci
+build_script="do-build.sh"
 
-curl -o $dib_xci_folder/do-build.sh https://raw.githubusercontent.com/hwoarang/docker-dib-xci/master/do-build.sh
-cd $dib_xci_folder
-./do-build.sh
+cd $(mktemp)
+curl -o ./$build_script https://raw.githubusercontent.com/hwoarang/docker-dib-xci/master/$build_script
+chmod +x $build_script
+./$build_script
 
-mv $ONE_DISTRO.qcow2 $output_folder
+cp $ONE_DISTRO.qcow* $output_folder
